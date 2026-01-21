@@ -9,4 +9,4 @@ const povesti = new Povestidesucces(page);
   await povesti.open();
   await povesti.openPovestiDeSucces();
  
-});
+});   
