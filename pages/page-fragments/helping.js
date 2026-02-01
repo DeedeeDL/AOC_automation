@@ -6,6 +6,9 @@ constructor(page) {
   this.rightarrow = page.locator('.swiper-button-next');
   this.emailLink = page.locator('a[href="mailto: aocpeviitor@gmail.com"]');
   this.declaratieLink = page.locator('a[href="https://redirectioneaza.ro/asociatia-oportunitati-si-cariere/" ]');
+  this.slide = page.locator('div.how-contribute__job .swiper-slide');
+  this.detailsButton = this.slide.getByText('Detalii');
+  this.detailsTitle = page.locator('h1');
 }
 
 async gotoHelpingPage() {
@@ -37,5 +40,27 @@ async clickEmail() {
 
 async clickDeclaratie() {
   await this.declaratieLink.click();
+}
+
+async getJobsCount() {
+  return await this.slides.count();
+}
+
+async getJobTitleFromCarousel(index) {
+  return (await this.slides.nth(index).locator('h3').innerText()).trim();
+}
+
+async clickDetailsForJob(index) {
+  await this.slides.nth(index).getByText('Detalii').click();
+}
+
+async validateJobDetailsPage(jobTitle) {
+  await expect(this.page).toHaveURL(/careers\/.+/);
+  await expect(this.detailsTitle).toContainText(jobTitle);
+}
+
+async goBackToCarousel() {
+  await this.page.goBack();
+  await expect(this.slides.first()).toBeVisible();
 }
 }
